@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" ptype="MONOLITH" ppkg="com.mycompany.eurovisionsongcontest" epkg="domain" v="4.9" rws="_15817068230412" Pws="_15817068230412" cws="_15817068230412" persistenceUnitName="DEFAULT_PU" sm="false" xs="false" id="_15817068230401" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
+    <jpa:entity compositePrimaryKeyClass="ContestPK" abs="false" class="Contest" v="true" jbn="false" xre="false" m="false" rootElement="_15817068230401" id="_15817068278663">
+        <jpa:ath>minna</jpa:ath>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" v="true" xvt="" name="name" id="_158170712518918">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:column name="NAME" unique="false" nullable="true" insertable="true" updatable="true" length="255"/>
+            </jpa:basic>
+            <jpa:one-to-many collection-type="java.util.List" cit="java.util.ArrayList" connected-entity-id="_15817068380909" connected-attribute-id="_1581927916366163" v="true" name="performances" id="_1581927916368164"/>
+            <jpa:many-to-many own="true" collection-type="java.util.List" cit="java.util.ArrayList" connected-entity-id="_158170684244215" connected-attribute-id="_158170792880545" v="true" xvt="" name="voters" id="_158170792880144">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:many-to-many>
+            <jpa:id attribute-type="Long" v="true" xvt="" name="id" id="_15817068280264">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="false" name="Contest.findAll">
+            <jpa:query>Select e from Contest e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Contest.findByName">
+            <jpa:query>Select c from Contest c where c.name=:name</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="ContestantPK" abs="false" class="Contestant" v="true" jbn="false" xre="false" m="false" rootElement="_15817068230401" id="_15817068304596">
+        <jpa:ath>minna</jpa:ath>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" v="true" xvt="" name="artist" id="_158170714171519">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:basic>
+            <jpa:basic attribute-type="String" v="true" xvt="" name="song" ft="false" id="_158170718249420">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:column unique="false" nullable="false" insertable="true" updatable="true" length="255"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="String" v="true" xvt="" name="country" ft="false" id="_158170718653821">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:column unique="false" nullable="false" insertable="true" updatable="true" length="255"/>
+            </jpa:basic>
+            <jpa:one-to-many collection-type="java.util.List" cit="java.util.ArrayList" connected-entity-id="_15817068380909" connected-attribute-id="_1581927823897160" v="true" name="performances" id="_1581927823899161"/>
+            <jpa:id attribute-type="Long" v="true" xvt="" name="id" id="_15817068304617">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="false" name="Contestant.findAll">
+            <jpa:query>Select e from Contestant e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Contestant.findByArtist">
+            <jpa:query>Select c from Contestant c where c.artist=:artist</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Contestant.findBySong">
+            <jpa:query>Select c from Contestant c where c.song=:song</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Contestant.findByCountry">
+            <jpa:query>Select c from Contestant c where c.country=:country</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyType="D" compositePrimaryKeyClass="PerformancePK" abs="false" class="Performance" v="true" jbn="false" xre="false" m="false" rootElement="_15817068230401" id="_15817068380909">
+        <jpa:ath>minna</jpa:ath>
+        <jpa:attributes>
+            <jpa:basic attribute-type="int" v="true" xvt="" name="startNumber" id="_158170720111822">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:basic>
+            <jpa:many-to-one primaryKey="true" connected-entity-id="_15817068304596" connected-attribute-id="_1581927823899161" v="true" name="contestant" id="_1581927823897160"/>
+            <jpa:many-to-one primaryKey="true" connected-entity-id="_15817068278663" connected-attribute-id="_1581927916368164" v="true" name="contest" id="_1581927916366163"/>
+            <jpa:one-to-many orp="false" collection-type="java.util.List" cit="java.util.ArrayList" connected-entity-id="_158170684015212" connected-attribute-id="_158170800547156" v="true" xvt="" name="votes" id="_158170800547157">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:one-to-many>
+        </jpa:attributes>
+        <jpa:nq e="false" name="Performance.findAll">
+            <jpa:query>Select e from Performance e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Performance.findByStartNumber">
+            <jpa:query>Select p from Performance p where p.startNumber=:startNumber</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyType="D" compositePrimaryKeyClass="VotePK" abs="false" class="Vote" v="true" jbn="false" xre="false" m="false" rootElement="_15817068230401" id="_158170684015212">
+        <jpa:ath>minna</jpa:ath>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" v="true" xvt="" name="note" id="_158170723275523">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:basic>
+            <jpa:basic attribute-type="int" v="true" xvt="" name="grade" ft="false" id="_158170729628724">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:bv>
+                    <jpa:mi v="0"/>
+                    <jpa:ma v="5"/>
+                </jpa:bv>
+                <jpa:column unique="false" nullable="false" insertable="true" updatable="true" precision="0"/>
+            </jpa:basic>
+            <jpa:many-to-one optional="true" primaryKey="true" connected-entity-id="_158170684244215" connected-attribute-id="_158170799737654" v="true" xvt="" name="voter" id="_158170799737453">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:many-to-one>
+            <jpa:many-to-one optional="true" primaryKey="true" connected-entity-id="_15817068380909" connected-attribute-id="_158170800547157" v="true" xvt="" name="performance" id="_158170800547156">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:many-to-one>
+        </jpa:attributes>
+        <jpa:nq e="false" name="Vote.findAll">
+            <jpa:query>Select e from Vote e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Vote.findByNote">
+            <jpa:query>Select v from Vote v where v.note=:note</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Vote.findByGrade">
+            <jpa:query>Select v from Vote v where v.grade=:grade</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="VoterPK" abs="false" class="Voter" v="true" jbn="false" xre="false" m="false" rootElement="_15817068230401" id="_158170684244215">
+        <jpa:ath>minna</jpa:ath>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" v="true" xvt="" name="name" id="_158170760973439">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:column unique="false" nullable="false" insertable="true" updatable="true" length="255"/>
+            </jpa:basic>
+            <jpa:one-to-many orp="false" collection-type="java.util.List" cit="java.util.ArrayList" connected-entity-id="_158170684015212" connected-attribute-id="_158170799737453" v="true" xvt="" name="votes" id="_158170799737654">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:one-to-many>
+            <jpa:many-to-many collection-type="java.util.List" cit="java.util.ArrayList" connected-entity-id="_15817068278663" connected-attribute-id="_158170792880144" v="true" xvt="" name="contests" id="_158170792880545">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:many-to-many>
+            <jpa:id attribute-type="Long" v="true" xvt="" name="id" id="_158170684244516">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="false" name="Voter.findAll">
+            <jpa:query>Select e from Voter e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Voter.findByName">
+            <jpa:query>Select v from Voter v where v.name=:name</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:snp loc="BEFORE_PACKAGE" e="true">/**
+ * This file was generated by the Jeddict
+ */</jpa:snp>
+    <jpa:c/>
+    <jpa:wsl>
+        <jpa:ws n="Main" id="_15817068230412">
+            <i ref="_15817068278663" x="491" y="46"/>
+            <i ref="_158170684015212" x="316" y="466"/>
+            <i ref="_15817068304596" x="870" y="134"/>
+            <i ref="_158170684244215" x="203" y="244"/>
+            <i ref="_15817068380909" x="601" y="268"/>
+        </jpa:ws>
+    </jpa:wsl>
+</jpa:entity-mappings>
