@@ -7,7 +7,6 @@ package UI;
 
 import esc.VoterManager;
 import esc.domain.Voter;
-import java.util.List;
 
 /**
  *
@@ -46,7 +45,7 @@ public class VoterMenu extends Menu {
     }
 
     public void createVoter() {
-        String name = Utils.askForString("Name: ");
+        String name = UI.askForString("Name: ");
         voterManager.createVoter(name);
     }
 

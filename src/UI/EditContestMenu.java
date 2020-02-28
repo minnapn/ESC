@@ -83,7 +83,7 @@ public class EditContestMenu extends Menu {
     }
 
     private boolean deleteContest() {
-        String sure = Utils.askForString("Are you sure? Press Y to continue or any other key to abort");
+        String sure = UI.askForString("Are you sure? Press Y to continue or any other key to abort");
         if (sure.equalsIgnoreCase("y")) {
             escManager.deleteContest(contest.getId());
             return true;
@@ -97,7 +97,7 @@ public class EditContestMenu extends Menu {
         List<Voter> availableVoters = voterManager.getAllVoters();
         availableVoters.removeAll(contest.getVoters());
         UI.showList(availableVoters, "AVAILABLE VOTERS");
-        Long voterId = Utils.askForLong("Choose voter by ID: ");
+        Long voterId = UI.askForLong("Choose voter by ID: ");
         Voter voter = voterManager.getVoter(voterId);
         escManager.addVoterToContest(voter, contest);
         
@@ -114,9 +114,9 @@ public class EditContestMenu extends Menu {
         List<Contestant> availableContestants = escManager.getAllContestants();
         availableContestants.removeAll(getAllContestantsForContest());
         UI.showList(availableContestants, "AVAILABLE CONTESTANTS");
-        Long contestantId = Utils.askForLong("Choose contestant by ID: ");
+        Long contestantId = UI.askForLong("Choose contestant by ID: ");
         Contestant contestant = escManager.getContestantById(contestantId);
-        int startNbr = Utils.askForInt("Start number: ");
+        int startNbr = UI.askForInt("Start number: ");
         escManager.addPerformance(startNbr, contestant, contest);
 
     }
@@ -133,20 +133,21 @@ public class EditContestMenu extends Menu {
 
     private void removeVoter() {
         seeAllVotersInContest();
-        Long id = Utils.askForLong("ID of voter to remove: ");
+        Long id = UI.askForLong("ID of voter to remove: ");
         Voter voter = voterManager.getVoter(id);
         voterManager.removeVoterFromContest(contest, voter);
     }
 
     private void removePerformance() {
         seeAllPerformancesInContest();
-        int startNmbr = Utils.askForInt("Startnumber of performance to remove: ");
+        int startNmbr = UI.askForInt("Startnumber of performance to remove: ");
         Performance performance = escManager.getPerformanceByStartNbr(startNmbr, contest);
-        escManager.removePerformance(performance, contest);
+        Contestant contestant = performance.getContestant();
+        escManager.removePerformance(contestant, contest);
     }
 
     private void editName() {
-        String newName = Utils.askForString("New name: ");
+        String newName = UI.askForString("New name: ");
         escManager.editNameOfContest(contest, newName);
     }
 

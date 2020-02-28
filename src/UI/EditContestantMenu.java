@@ -1,14 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package UI;
 
-import esc.ESCmanager;
 import esc.domain.Contest;
 import esc.domain.Contestant;
-import esc.domain.Performance;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,7 +72,7 @@ public class EditContestantMenu extends Menu {
     }
 
     private boolean deleteContestant() {
-        String sure = Utils.askForString("Are you sure? Press Y to continue or any other key to abort");
+        String sure = UI.askForString("Are you sure? Press Y to continue or any other key to abort");
         if (sure.equalsIgnoreCase("y")) {
             escManager.deleteContestantById(contestant.getId());
             return true;
@@ -90,19 +83,19 @@ public class EditContestantMenu extends Menu {
     }
 
     private void editCountry() {
-        String newCountry = Utils.askForString("New country: ");
+        String newCountry = UI.askForString("New country: ");
         escManager.editContestantCountry(contestant, newCountry);
         updateHeader(contestant.toString());
     }
 
     private void editArtist() {
-        String newArtist = Utils.askForString("New artist: ");
+        String newArtist = UI.askForString("New artist: ");
         escManager.editContestantArtist(contestant, newArtist);
         updateHeader(contestant.toString());
     }
 
     private void editSong() {
-        String newSong = Utils.askForString("New song: ");
+        String newSong = UI.askForString("New song: ");
         escManager.editContestantSong(contestant, newSong);
         updateHeader(contestant.toString());
     }
@@ -126,15 +119,15 @@ public class EditContestantMenu extends Menu {
         List<Contest> contests = escManager.getAllContests();
         contests.removeAll(getAllContestsForContestant());
         UI.showList(contests, "AVAILABLE CONTESTS");
-        Long contestId = Utils.askForLong("ID: ");
-        int startnumber = Utils.askForInt("Startnumber: ");
+        Long contestId = UI.askForLong("ID: ");
+        int startnumber = UI.askForInt("Startnumber: ");
         Contest contest = escManager.getContest(contestId);
         escManager.addPerformance(startnumber, contestant, contest);
     }
 
     private void deletePerformanceInContest() {
         UI.showList(getAllContestsForContestant(), "CONTESTS");
-        Long contestId = Utils.askForLong("ID of contest: ");
+        Long contestId = UI.askForLong("ID of contest: ");
         Contest contest = escManager.getContest(contestId);
         escManager.removePerformance(contestant, contest);
     }

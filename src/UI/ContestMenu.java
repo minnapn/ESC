@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package UI;
 
 import esc.domain.Contest;
-import java.util.List;
 
 /**
  *
@@ -49,7 +43,7 @@ public class ContestMenu extends Menu {
     }
 
     public void addContest() {
-        String name = Utils.askForString("Name: ");
+        String name = UI.askForString("Name: ");
         escManager.createContest(name);
         System.out.println("Contest added");
     }

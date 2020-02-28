@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package UI;
 
 import esc.ESCmanager;
@@ -28,7 +23,7 @@ public abstract class Menu {
     }
 
     protected int selectOption() {
-        return Utils.askForInt("Option: ");
+        return UI.askForInt("Option: ");
     }
 
     public void show() {
@@ -41,9 +36,9 @@ public abstract class Menu {
                 show = performOption(option);
             } catch (Exception e) {
                 System.out.println();
-                Utils.stars();
+                UI.stars();
                 System.out.println("Oooops, something went wrong, more info: " + e);
-                Utils.stars();
+                UI.stars();
             }
         }
     }
@@ -51,7 +46,7 @@ public abstract class Menu {
     protected void menuHeader() {
         System.out.println();
         System.out.println(this.header);
-        Utils.line();
+        UI.line();
     }
 
     protected void updateHeader(String newHeader) {

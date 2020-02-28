@@ -42,9 +42,9 @@ public class ContestantMenu extends Menu {
     }
 
     private void addContestant() {
-        String artist = Utils.askForString("Artist: ");
-        String song = Utils.askForString("Song: ");
-        String country = Utils.askForString("Country: ");
+        String artist = UI.askForString("Artist: ");
+        String song = UI.askForString("Song: ");
+        String country = UI.askForString("Country: ");
         escManager.createContestant(artist, song, country);
     }
 

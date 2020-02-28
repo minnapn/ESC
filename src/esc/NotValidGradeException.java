@@ -5,17 +5,13 @@
  */
 package esc;
 
-import UI.MainMenu;
-
 /**
  *
  * @author minna
  */
-public class ESCmain {
+public class NotValidGradeException extends Exception {
 
-    public static void main(String[] args) {
-        
-        new MainMenu().show();
-
+    public NotValidGradeException() {
     }
+    
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package UI;
 
 import esc.VoterManager;
@@ -66,7 +61,7 @@ boolean goBack = false;
     }
 
     private void editName() {
-        String newName = Utils.askForString("New name: ");
+        String newName = UI.askForString("New name: ");
         voterManager.editVoterName(voter, newName);
 
     }
@@ -79,20 +74,20 @@ boolean goBack = false;
         List<Contest> contestsAvailable = escManager.getAllContests();
         contestsAvailable.removeAll(voter.getContests());
         UI.showList(contestsAvailable, "CONTESTS AVAILABLE");
-        Long contestId = Utils.askForLong("Choose contest by ID: ");
+        Long contestId = UI.askForLong("Choose contest by ID: ");
         Contest contest = escManager.getContest(contestId);
         escManager.addVoterToContest(voter, contest);
     }
 
     private void removeContestFromVoter() {
         showContestsForVoter();
-        Long contestId = Utils.askForLong("ID of contest to remove: ");
+        Long contestId = UI.askForLong("ID of contest to remove: ");
         Contest contest = voter.getContests().stream().filter(c -> c.getId().equals(contestId)).findAny().get();
         voterManager.removeVoterFromContest(contest, voter);
     }
 
     private boolean deleteVoter() {
-        String sure = Utils.askForString("Are you sure? Press Y to continue or any other key to abort");
+        String sure = UI.askForString("Are you sure? Press Y to continue or any other key to abort");
             if (sure.equalsIgnoreCase("y")) {
             voterManager.deleteVoter(voter.getId());
             return true;

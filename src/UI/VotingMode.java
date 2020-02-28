@@ -9,10 +9,9 @@ import esc.ESCmanager;
 import esc.VoterManager;
 import esc.domain.Contest;
 import esc.domain.Performance;
-import esc.domain.PerformancePK;
 import esc.domain.Vote;
 import esc.domain.Voter;
-import esc.notValidGradeException;
+import esc.NotValidGradeException;
 import java.util.List;
 
 /**
@@ -32,24 +31,12 @@ public class VotingMode extends Menu {
         this.voters = contest.getVoters();
     }
 
-    /*public void run() {
-
-        contest.getPerformances().sort((p1, p2) -> p1.getStartnumber() - p2.getStartnumber());
-        voters.sort((v1, v2) -> v1.getName().compareTo(v2.getName()));
-
-        printVotingTable();
-
-        vote();
-
-        printVotingTable();
-
-    }*/
-    private void vote(int option) throws notValidGradeException {
+    private void vote(int option) throws NotValidGradeException {
         Long voterId = new Long(option);
         Voter voter = voterManager.getVoter(voterId);
-        int startNbr = Utils.askForInt("Startnumber: ");
+        int startNbr = UI.askForInt("Startnumber: ");
         Performance performance = escManager.getPerformanceByStartNbr(startNbr, contest);
-        int grade = Utils.askForInt("Grade: ");
+        int grade = UI.askForInt("Grade: ");
         if (voterManager.validGrade(grade)) {
             Vote vote = voterManager.findVoteForPerformanceByVoter(performance, voter);
             if (vote == null) {
@@ -67,21 +54,21 @@ public class VotingMode extends Menu {
         for (Performance performance : contest.getPerformances()) {
             printPerformanceAndVotes(performance);
         }
-        Utils.line();
+        UI.line();
     }
 
     public void printVotingTableHeader() {
         System.out.println();
-        String performance = Utils.fixLengthString("#", 3)
-                + Utils.fixLengthString("COUNTRY", 10) + " "
-                + Utils.fixLengthString("ARTIST", 10) + "   "
-                + Utils.fixLengthString("SONG", 10) + " ";
+        String performance = UI.fixLengthString("#", 3)
+                + UI.fixLengthString("COUNTRY", 10) + " "
+                + UI.fixLengthString("ARTIST", 10) + "   "
+                + UI.fixLengthString("SONG", 10) + " ";
         System.out.print(performance);
         for (Voter voter : voters) {
-            System.out.print(Utils.fixLengthString("(" + voter.getId() + ")" + voter.getName(), 10) + " ");
+            System.out.print(UI.fixLengthString("(" + voter.getId() + ")" + voter.getName(), 10) + " ");
         }
         System.out.println();
-        Utils.line();
+        UI.line();
     }
 
     public void printPerformanceAndVotes(Performance performance) {
@@ -91,9 +78,9 @@ public class VotingMode extends Menu {
         for (Voter voter : contest.getVoters()) {
             Vote vote = voterManager.findVoteForPerformanceByVoter(performance, voter);
             if (vote != null) {
-                System.out.print(Utils.fixLengthString("  " + vote.getGrade(), 10) + " ");
+                System.out.print(UI.fixLengthString("  " + vote.getGrade(), 10) + " ");
             } else {
-                System.out.print(Utils.fixLengthString("  " + " ", 10) + " ");
+                System.out.print(UI.fixLengthString("  " + " ", 10) + " ");
             }
         }
         System.out.println("");
@@ -125,7 +112,7 @@ public class VotingMode extends Menu {
 
     @Override
     protected int selectOption() {
-        int option = Utils.askForInt("Vote by entering ID of voter or press 0 to go back: ");
+        int option = UI.askForInt("Vote by entering ID of voter or press 0 to go back: ");
         return option;
     }
 

@@ -1,15 +1,10 @@
 package esc;
 
-import static esc.ESCmanager.factory;
 import esc.domain.Contest;
-import esc.domain.Contestant;
 import esc.domain.Performance;
-import esc.domain.PerformancePK;
 import esc.domain.Vote;
-import esc.domain.VotePK;
 import esc.domain.Voter;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -24,9 +19,9 @@ public class VoterManager {
 
     public Voter createVoter(String name) {
         EntityManager em = factory.createEntityManager();
-        Voter voter = new Voter(name);
-
+        
         em.getTransaction().begin();
+        Voter voter = new Voter(name);
         em.persist(voter);
         em.getTransaction().commit();
 
@@ -60,30 +55,14 @@ public class VoterManager {
         return voters;
     }
 
-//    public void giveVote(Voter voter, Contestant contestant, Contest contest, int grade) {
-//        EntityManager em = factory.createEntityManager();
-//        //voter.addVote(vote);
-//        Performance performance = em.find(Performance.class, new PerformancePK(contest.getId(), contestant.getId()));
-//        //performance.addVote(vote);
-//        em.getTransaction().begin();
-//        //Vote vote = new Vote(new VotePK(contest.getId(), contestant.getId(), voter.getId()), grade);
-//        Vote vote = new Vote(performance, voter, grade);
-//        em.persist(vote);
-//        //em.merge(performance);
-//        em.getTransaction().commit();
-//        em.close();
-//        System.out.println("votes in giveVote in VoterManager " + performance.getVotes());
-//    }
-    public void giveVote(Voter voter, Performance performance, int grade) throws notValidGradeException {
+    public void giveVote(Voter voter, Performance performance, int grade) throws NotValidGradeException {
         if (!validGrade(grade)) {
-            throw new notValidGradeException();
+            throw new NotValidGradeException();
         }
         EntityManager em = factory.createEntityManager();
 
         em.getTransaction().begin();
         Vote vote = new Vote(performance, voter, grade);
-        em.merge(performance);
-        em.merge(voter);
         em.persist(vote);
         em.getTransaction().commit();
 
@@ -94,16 +73,14 @@ public class VoterManager {
         return (grade>0 && grade<=5);
     }
 
-    public void updateVote(Vote vote, Voter voter, Performance performance, int grade) throws notValidGradeException {
+    public void updateVote(Vote vote, Voter voter, Performance performance, int grade) throws NotValidGradeException {
          if (!validGrade(grade)) {
-            throw new notValidGradeException();
+            throw new NotValidGradeException();
         }
         EntityManager em = factory.createEntityManager();
        
         em.getTransaction().begin();
         vote.setGrade(grade);
-        em.merge(voter);
-        em.merge(performance);
         em.merge(vote);
         em.getTransaction().commit();
 
@@ -117,6 +94,8 @@ public class VoterManager {
         contest.removeVoter(voter);
         for (Vote vote : voter.getVotes()) {
             if (vote.getPerformance().getContest().equals(contest)) {
+                vote.getPerformance().removeVote(vote);
+                em.merge(vote.getPerformance());
                 vote = em.merge(vote);
                 em.remove(vote);
             }
@@ -129,7 +108,9 @@ public class VoterManager {
 
     public Vote findVoteForPerformanceByVoter(Performance performance, Voter voter) {
         try {
-            Vote vote = performance.getVotes().stream().filter(p -> p.getVoter().equals(voter)).findAny().get();
+            Vote vote = performance.getVotes().stream()
+                    .filter(p -> p.getVoter().equals(voter))
+                    .findAny().get();
             return vote;
         } catch (Exception e) {
             return null;
