@@ -5,6 +5,7 @@ import esc.domain.Contestant;
 import esc.domain.Performance;
 import esc.domain.PerformancePK;
 import esc.domain.Voter;
+import esc.domain.Vote;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,7 +21,7 @@ public class ESCmanager {
 
     public Contest createContest(String name) {
         EntityManager em = factory.createEntityManager();
-        
+
         em.getTransaction().begin();
         Contest contest = new Contest(name);
         em.persist(contest);
@@ -35,6 +36,16 @@ public class ESCmanager {
         Contest contest = em.find(Contest.class, id);
 
         em.getTransaction().begin();
+        List<Performance> performances = contest.getPerformances();
+        for (Performance performance : performances) {
+            deletePerformance(performance);
+        }
+        List<Voter> voters = contest.getVoters();
+        for (Voter voter : voters) {
+            voter.removeContest(contest);
+            em.merge(voter);
+        }
+
         em.remove(contest);
         em.getTransaction().commit();
 
@@ -54,7 +65,7 @@ public class ESCmanager {
         em.close();
         return contests;
     }
-    
+
     public void editNameOfContest(Contest contest, String newName) {
         EntityManager em = factory.createEntityManager();
 
@@ -80,7 +91,7 @@ public class ESCmanager {
 
     public Contestant createContestant(String artist, String song, String country) {
         EntityManager em = factory.createEntityManager();
-        
+
         em.getTransaction().begin();
         Contestant contestant = new Contestant(artist, song, country);
         em.persist(contestant);
@@ -90,13 +101,12 @@ public class ESCmanager {
         return contestant;
     }
 
-    
     public void deleteContestantById(Long id) {
         EntityManager em = factory.createEntityManager();
         Contestant contestant = em.find(Contestant.class, id);
 
         em.getTransaction().begin();
-        contestant.getPerformances().forEach(p -> em.remove(p));
+        contestant.getPerformances().forEach(p -> deletePerformance(p));
         em.remove(contestant);
         em.getTransaction().commit();
 
@@ -116,14 +126,14 @@ public class ESCmanager {
         em.getTransaction().begin();
         Performance performance = new Performance(startNumber, contestant, contest);
         em.persist(performance);
+        em.merge(contest);
+        em.merge(contestant);
         em.getTransaction().commit();
 
         em.close();
 
         return performance;
     }
-
-
 
     public Performance getPerformanceByStartNbr(int startNmbr, Contest contest) {
         Performance performance = contest.getPerformances().stream()
@@ -133,7 +143,6 @@ public class ESCmanager {
         return performance;
     }
 
-
     public List<Contestant> getAllContestants() {
         EntityManager em = factory.createEntityManager();
         List<Contestant> contestants
@@ -142,8 +151,6 @@ public class ESCmanager {
         return contestants;
     }
 
-    
-         
     public void editContestantCountry(Contestant contestant, String newCountry) {
         EntityManager em = factory.createEntityManager();
 
@@ -176,50 +183,63 @@ public class ESCmanager {
 
         em.close();
     }
-    
 
-//    public void removePerformance(Performance performance, Contest contest) {
-//        EntityManager em = factory.createEntityManager();
-//        Contestant contestant = performance.getContestant();
-//        em.getTransaction().begin();
-//        performance = em.merge(performance);        
-//        contest.removePerformance(performance);
-//        contestant.removePerformance(performance);
-//        em.remove(performance);
-//        em.getTransaction().commit();
-//        
-//        em.close();
-//    }
-    
-        public void removePerformance(Contestant contestant, Contest contest) {
+    public void deletePerformance(Performance performance) {
         EntityManager em = factory.createEntityManager();
-        Performance performance = findPerformanceForContestantInContest(contestant, contest);
+        Contest contest = performance.getContest();
+        Contestant contestant = performance.getContestant();
         
         em.getTransaction().begin();
         performance = em.merge(performance);
         contest.removePerformance(performance);
         contestant.removePerformance(performance);
+        List<Vote> votes = performance.getVotes();
+        for (Vote vote : votes) {
+            Voter voter = vote.getVoter();
+            voter.removeVote(vote);
+            em.merge(voter);
+        }
         em.remove(performance);
+        em.merge(contest);
+        em.merge(contestant);
         em.getTransaction().commit();
         em.close();
     }
     
-    public Performance findPerformanceForContestantInContest(Contestant contestant, Contest contest){
+    public void deletePerformance(Contestant contestant, Contest contest) {
+        EntityManager em = factory.createEntityManager();
+        Performance performance = findPerformanceForContestantInContest(contestant, contest);
+
+        em.getTransaction().begin();
+        performance = em.merge(performance);
+        contest.removePerformance(performance);
+        contestant.removePerformance(performance);
+        List<Vote> votes = performance.getVotes();
+        for (Vote vote : votes) {
+            Voter voter = vote.getVoter();
+            voter.removeVote(vote);
+            em.merge(voter);
+        }
+        em.remove(performance);
+        em.merge(contest);
+        em.merge(contestant);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    public Performance findPerformanceForContestantInContest(Contestant contestant, Contest contest) {
         EntityManager em = factory.createEntityManager();
         Performance performance = em.find(Performance.class, new PerformancePK(contest.getId(), contestant.getId()));
         em.close();
         return performance;
     }
-    
- 
-     
-        public List<Performance> getAllPerformances() {
+
+    public List<Performance> getAllPerformances() {
         EntityManager em = factory.createEntityManager();
         List<Performance> performances
                 = em.createNamedQuery("Performance.findAll").getResultList();
         em.close();
         return performances;
     }
-      
 
 }

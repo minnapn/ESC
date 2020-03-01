@@ -126,7 +126,7 @@ public class Performance implements Serializable {
 
     public void removeVote(Vote vote) {
         getVotes().remove(vote);
-        vote.setPerformance(null);
+        //vote.setPerformance(null);
     }
 
     @Override

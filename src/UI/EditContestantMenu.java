@@ -129,7 +129,7 @@ public class EditContestantMenu extends Menu {
         UI.showList(getAllContestsForContestant(), "CONTESTS");
         Long contestId = UI.askForLong("ID of contest: ");
         Contest contest = escManager.getContest(contestId);
-        escManager.removePerformance(contestant, contest);
+        escManager.deletePerformance(contestant, contest);
     }
 
 }

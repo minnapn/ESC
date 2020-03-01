@@ -121,7 +121,7 @@ public class Voter implements Serializable {
 
     public void removeVote(Vote vote) {
         getVotes().remove(vote);
-        vote.setVoter(null);
+        //vote.setVoter(null);
     }
     
     

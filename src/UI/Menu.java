@@ -32,14 +32,15 @@ public abstract class Menu {
             menuHeader();
             showOptions();
             int option = selectOption();
-            try {
+            show = performOption(option);
+            /*try {
                 show = performOption(option);
             } catch (Exception e) {
                 System.out.println();
                 UI.stars();
                 System.out.println("Oooops, something went wrong, more info: " + e);
                 UI.stars();
-            }
+            }*/
         }
     }
 

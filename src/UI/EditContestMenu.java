@@ -143,7 +143,7 @@ public class EditContestMenu extends Menu {
         int startNmbr = UI.askForInt("Startnumber of performance to remove: ");
         Performance performance = escManager.getPerformanceByStartNbr(startNmbr, contest);
         Contestant contestant = performance.getContestant();
-        escManager.removePerformance(contestant, contest);
+        escManager.deletePerformance(contestant, contest);
     }
 
     private void editName() {

@@ -32,9 +32,22 @@ public class VoterManager {
     public void deleteVoter(Long id) {
         EntityManager em = factory.createEntityManager();
         Voter voter = em.find(Voter.class, id);
-
+        
         em.getTransaction().begin();
-        voter.getVotes().forEach((vote) -> em.remove(vote));
+        
+        List<Contest> contests = voter.getContests();
+        for (Contest contest : contests) {
+            contest.removeVoter(voter);
+            em.merge(contest);
+        }
+        
+        List<Vote> votes = voter.getVotes();
+        for (Vote vote : votes) {
+            Performance performance = vote.getPerformance();
+            performance.removeVote(vote);
+            em.merge(performance);
+            em.remove(vote);
+        }
         em.remove(voter);
         em.getTransaction().commit();
 
@@ -64,6 +77,8 @@ public class VoterManager {
         em.getTransaction().begin();
         Vote vote = new Vote(performance, voter, grade);
         em.persist(vote);
+        em.merge(performance);
+        em.merge(voter);
         em.getTransaction().commit();
 
         em.close();
@@ -92,10 +107,12 @@ public class VoterManager {
 
         em.getTransaction().begin();
         contest.removeVoter(voter);
-        for (Vote vote : voter.getVotes()) {
+        List<Vote> votes = voter.getVotes();
+        for (Vote vote : votes) {
             if (vote.getPerformance().getContest().equals(contest)) {
-                vote.getPerformance().removeVote(vote);
-                em.merge(vote.getPerformance());
+                Performance performance = vote.getPerformance();
+                performance.removeVote(vote);
+                em.merge(performance);
                 vote = em.merge(vote);
                 em.remove(vote);
             }
